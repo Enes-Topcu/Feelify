@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Feelify - Emotion Chart</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Courier+New:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/stats-style.css" />
+  </head>
+  <body>
+    <div class="dashboard-window">
+      <aside class="sidebar-left">
+        <div class="logo-area">
+          <div class="logo">Feel<span class="logo-accent">ify</span></div>
+          <div class="slogan">Your feelings, your melody.</div>
+        </div>
+
+        <div class="playlist-section">
+          <h2>Your Library</h2>
+          <ul id="saved-playlists">
+            <li>
+              <span style="color: #b3b3b3; font-size: 12px"
+                >Loading playlists...</span
+              >
+            </li>
+          </ul>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <div class="stats-header">
+          <h2>🎵 Your Listening Emotions & Genres</h2>
+        </div>
+
+        <div
+          id="loading-emotion"
+          style="text-align: center; color: #b3b3b3; margin-top: 50px"
+        >
+          <i class="fas fa-spinner fa-spin fa-2x"></i>
+          <p>Analyzing your emotional vibe...</p>
+        </div>
+
+        <div class="stats-grid" id="emotion-content" style="display: none">
+          <div class="stat-card">
+            <h3>Your Emotions 🎭</h3>
+            <canvas id="emotionChart" style="max-height: 350px"></canvas>
+            <div
+              class="list-container"
+              id="emotion-list"
+              style="margin-top: 20px"
+            ></div>
+          </div>
+
+          <div class="stat-card">
+            <h3>Top Genres 🎸</h3>
+            <canvas id="genreChart" style="max-height: 350px"></canvas>
+            <div
+              class="list-container"
+              id="genre-list"
+              style="margin-top: 20px"
+            ></div>
+          </div>
+        </div>
+
+        <div
+          id="emotion-summary"
+          style="
+            text-align: center;
+            padding: 20px;
+            background: rgba(30, 215, 96, 0.1);
+            border-radius: 10px;
+            color: #b3b3b3;
+            margin-top: 20px;
+            display: none;
+          "
+        ></div>
+      </main>
+
+      <aside class="sidebar-right">
+        <div
+          class="sidebar-content-wrapper"
+          style="
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          "
+        >
+          <div class="profile-area">
+            <img
+              src=""
+              alt="Profile"
+              class="avatar"
+              id="user-avatar"
+              style="display: none"
+            />
+            <div
+              class="avatar"
+              id="user-avatar-placeholder"
+              style="
+                background: #333;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <i
+                class="fas fa-user"
+                style="color: #1ed760; font-size: 30px"
+              ></i>
+            </div>
+            <div class="username" id="user-name">Loading...</div>
+          </div>
+
+          <nav class="action-buttons">
+            <a href="/" class="btn-pill">
+              <i class="fas fa-home" style="margin-right: 8px"></i> Main Menu
+            </a>
+
+            <a href="/stats" class="btn-pill">Spotify Stats</a>
+            <a href="#" class="btn-pill active">Emotion Chart</a>
+            <a href="#" id="help-btn-emotion" class="btn-pill"
+              >Help & Support</a
+            >
+          </nav>
+        </div>
+
+        <div class="logout-wrapper" style="width: 100%">
+          <a href="/logout" class="btn-pill logout">Log Out</a>
+        </div>
+      </aside>
+    </div>
+
+    <div id="support-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">×</span>
+        <h2 style="color: white; text-align: center; margin-bottom: 20px">
+          Need Help?
+        </h2>
+        <p style="color: #b3b3b3; text-align: center; margin-bottom: 20px">
+          Contact us regarding your account or feedback.
+        </p>
+
+        <form id="support-form">
+          <div class="form-group">
+            <label>Your Email (Spotify)</label>
+            <input
+              type="email"
+              id="user-email"
+              readonly
+              placeholder="Fetching email..."
+              style="opacity: 0.7; cursor: not-allowed"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Message</label>
+            <textarea
+              id="support-msg"
+              rows="4"
+              placeholder="Type your message here..."
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn-pill modal-send-btn">
+            Send Message
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script>
+      // Load emotion chart on page load
+      async function loadEmotionChart() {
+        await loadUserProfile();
+        await loadSavedPlaylists();
+
+        const loadingEl = document.getElementById("loading-emotion");
+        const contentEl = document.getElementById("emotion-content");
+        const summaryEl = document.getElementById("emotion-summary");
+
+        try {
+          const res = await fetch("/api/emotion-analysis");
+          const data = await res.json();
+
+          // If server indicates insufficient Spotify scopes, show re-login CTA
+          if (
+            res.status === 403 &&
+            data &&
+            data.error === "insufficient_scope"
+          ) {
+            if (loadingEl) {
+              loadingEl.innerHTML = `
+                <p style="color:#b3b3b3;">We need permission to read your recent plays to analyze emotions.</p>
+                <a href="/login" class="btn-pill" style="margin-top:12px; display:inline-block;">Re-login to Spotify</a>
+              `;
+            }
+            return;
+          }
+
+          if (data.error) {
+            if (loadingEl)
+              loadingEl.innerHTML = `<p style="color:red">${data.error}</p>`;
+            return;
+          }
+
+          if (data.emotionData && data.emotionData.length > 0) {
+            displayEmotionCharts(data);
+            if (loadingEl) loadingEl.style.display = "none";
+            if (contentEl) contentEl.style.display = "flex";
+            if (summaryEl) summaryEl.style.display = "block";
+          } else {
+            if (loadingEl)
+              loadingEl.innerHTML =
+                '<p style="color:#b3b3b3;">Not enough listening data yet. Keep listening to see your emotion patterns!</p>';
+          }
+        } catch (e) {
+          console.error("Error loading emotion analysis:", e);
+          if (loadingEl)
+            loadingEl.innerHTML =
+              '<p style="color: red;">Failed to load emotion analysis. ' +
+              (e.message || "") +
+              "</p>";
+        }
+      }
+
+      function displayEmotionCharts(data) {
+        // Emotion Chart (Bar Chart)
+        const emotionCtx = document.getElementById("emotionChart");
+        if (emotionCtx && typeof Chart !== "undefined") {
+          const emotionLabels = data.emotionData.map((e) => e.label);
+          const emotionValues = data.emotionData.map((e) => e.value);
+          const emotionColors = [
+            "#667eea",
+            "#764ba2",
+            "#f093fb",
+            "#4facfe",
+            "#00f2fe",
+            "#43e97b",
+            "#fa709a",
+          ];
+
+          new Chart(emotionCtx, {
+            type: "bar",
+            data: {
+              labels: emotionLabels,
+              datasets: [
+                {
+                  label: "Number of Songs",
+                  data: emotionValues,
+                  backgroundColor: emotionColors.slice(0, emotionLabels.length),
+                  borderColor: "#1ed760",
+                  borderWidth: 2,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              plugins: {
+                legend: { labels: { color: "#b3b3b3" } },
+              },
+              scales: {
+                y: {
+                  ticks: { color: "#b3b3b3" },
+                  grid: { color: "rgba(179, 179, 179, 0.1)" },
+                },
+                x: {
+                  ticks: { color: "#b3b3b3" },
+                  grid: { color: "rgba(179, 179, 179, 0.1)" },
+                },
+              },
+            },
+          });
+
+          // Emotion List
+          let emotionListHtml = "";
+          data.emotionData.forEach((e) => {
+            emotionListHtml += `
+              <a href="#" class="list-item" style="cursor: default; text-decoration: none;">
+                <div class="rank" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold;">${e.percentage}%</div>
+                <div class="info" style="flex: 1;">
+                  <span class="title" style="color:white; font-weight:bold;">${e.label}</span>
+                  <span class="artist" style="color:#b3b3b3; font-size:12px;">${e.value} songs</span>
+                </div>
+              </a>
+            `;
+          });
+          document.getElementById("emotion-list").innerHTML = emotionListHtml;
+        }
+
+        // Genre Chart (Doughnut Chart)
+        const genreCtx = document.getElementById("genreChart");
+        if (genreCtx && typeof Chart !== "undefined") {
+          const genreLabels = data.genreData.map((g) => g.label);
+          const genreValues = data.genreData.map((g) => g.value);
+          const genreColors = [
+            "#1ed760",
+            "#ff9900",
+            "#667eea",
+            "#764ba2",
+            "#f093fb",
+            "#4facfe",
+            "#00f2fe",
+            "#43e97b",
+            "#fa709a",
+            "#feca57",
+          ];
+
+          new Chart(genreCtx, {
+            type: "doughnut",
+            data: {
+              labels: genreLabels,
+              datasets: [
+                {
+                  data: genreValues,
+                  backgroundColor: genreColors.slice(0, genreLabels.length),
+                  borderColor: "#181818",
+                  borderWidth: 2,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              plugins: {
+                legend: {
+                  position: "bottom",
+                  labels: { color: "#b3b3b3", padding: 15 },
+                },
+              },
+            },
+          });
+
+          // Genre List
+          let genreListHtml = "";
+          data.genreData.forEach((g) => {
+            genreListHtml += `
+              <a href="#" class="list-item" style="cursor: default; text-decoration: none;">
+                <div class="rank" style="background: linear-gradient(135deg, #1ed760 0%, #43e97b 100%); color: black; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold;">${g.percentage}%</div>
+                <div class="info" style="flex: 1;">
+                  <span class="title" style="color:white; font-weight:bold;">${g.label}</span>
+                  <span class="artist" style="color:#b3b3b3; font-size:12px;">${g.value} songs</span>
+                </div>
+              </a>
+            `;
+          });
+          document.getElementById("genre-list").innerHTML = genreListHtml;
+        }
+
+        // Summary
+        const topEmotion = data.emotionData[0];
+        const topGenre = data.genreData[0];
+        const summaryHtml = `
+          <p style="margin: 0; font-size: 16px;">
+            <strong style="color: #1ed760;">Top Emotion:</strong> ${topEmotion.label} (${topEmotion.percentage}%) 
+            <span style="color: #555;">|</span> 
+            <strong style="color: #1ed760;">Top Genre:</strong> ${topGenre.label}
+          </p>
+          <p style="margin: 10px 0 0 0; font-size: 12px;">Based on your ${data.totalTracks} most played songs</p>
+        `;
+        document.getElementById("emotion-summary").innerHTML = summaryHtml;
+      }
+
+      // Setup modal and load
+      function setupModal() {
+        const modal = document.getElementById("support-modal");
+        const closeBtn = document.querySelector(".close-modal");
+        const supportForm = document.getElementById("support-form");
+
+        const helpBtns = document.querySelectorAll("#help-btn-emotion");
+
+        helpBtns.forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (modal) modal.style.display = "flex";
+          });
+        });
+
+        if (closeBtn) {
+          closeBtn.addEventListener("click", () => {
+            if (modal) modal.style.display = "none";
+          });
+        }
+
+        if (modal) {
+          window.addEventListener("click", (e) => {
+            if (e.target == modal) modal.style.display = "none";
+          });
+        }
+
+        if (supportForm) {
+          supportForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const message = document.getElementById("support-msg").value;
+            const email = document.getElementById("user-email").value;
+            const sendBtn = document.querySelector(".modal-send-btn");
+
+            if (message.length < 5) {
+              alert("Please describe your issue.");
+              return;
+            }
+
+            sendBtn.innerHTML = "Sending...";
+            sendBtn.disabled = true;
+
+            try {
+              const res = await fetch("/api/send-support", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userEmail: email, message: message }),
+              });
+
+              const data = await res.json();
+
+              if (data.success) {
+                sendBtn.innerHTML = "Sent!";
+                sendBtn.style.backgroundColor = "#1ed760";
+                setTimeout(() => {
+                  modal.style.display = "none";
+                  document.getElementById("support-msg").value = "";
+                  sendBtn.innerText = "Send Message";
+                  sendBtn.style.backgroundColor = "";
+                  sendBtn.disabled = false;
+                }, 1500);
+              } else {
+                alert("Error: " + data.error);
+                sendBtn.innerText = "Try Again";
+                sendBtn.disabled = false;
+              }
+            } catch (err) {
+              console.error(err);
+              alert("Connection failed.");
+              sendBtn.innerText = "Try Again";
+              sendBtn.disabled = false;
+            }
+          });
+        }
+      }
+
+      async function loadUserProfile() {
+        try {
+          const res = await fetch("/api/me");
+          const data = await res.json();
+          document
+            .querySelectorAll("#user-name")
+            .forEach((el) => (el.innerText = data.username || "User"));
+          const emailInput = document.getElementById("user-email");
+          if (emailInput)
+            emailInput.value = data.email || "Email not available";
+          if (data.image) {
+            document.querySelectorAll("#user-avatar").forEach((img) => {
+              img.src = data.image;
+              img.style.display = "block";
+            });
+            document
+              .querySelectorAll("#user-avatar-placeholder")
+              .forEach((el) => (el.style.display = "none"));
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      }
+
+      async function loadSavedPlaylists() {
+        const lists = document.querySelectorAll("#saved-playlists");
+        if (lists.length === 0) return;
+
+        lists.forEach(
+          (l) =>
+            (l.innerHTML =
+              '<li style="padding:15px; color:#b3b3b3; font-size:12px;">Connecting to Spotify...</li>'),
+        );
+
+        try {
+          const res = await fetch("/api/my-playlists");
+          const data = await res.json();
+
+          lists.forEach((list) => {
+            list.innerHTML = "";
+            if (!data || data.length === 0) {
+              list.innerHTML =
+                '<li style="padding:15px; color:#777; font-size:12px;">No playlists found.</li>';
+              return;
+            }
+            data.forEach((pl) => {
+              const imgUrl =
+                pl.images && pl.images.length > 0 ? pl.images[0].url : null;
+              const imgHtml = imgUrl
+                ? `<img src="${imgUrl}" class="playlist-cover" style="width:50px; height:50px; border-radius:6px; object-fit:cover; margin-right:15px;">`
+                : `<div class="playlist-cover placeholder" style="width:50px; height:50px; background:#333; border-radius:6px; margin-right:15px; display:flex; align-items:center; justify-content:center;"><i class="fas fa-music"></i></div>`;
+
+              const li = document.createElement("li");
+              li.innerHTML = `
+                <a href="${pl.external_urls.spotify}" target="_blank" class="playlist-item" style="display:flex; align-items:center; text-decoration:none; color:#b3b3b3; margin-bottom:10px; padding:8px; border-radius:8px; transition:0.2s;">
+                  ${imgHtml}
+                  <div class="playlist-info" style="overflow:hidden;">
+                    <span class="playlist-name" style="font-size:14px; font-weight:700; color:white; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${pl.name}</span>
+                    <span class="playlist-count" style="font-size:11px; color:#666;">${pl.tracks.total} Songs</span>
+                  </div>
+                </a>`;
+
+              const link = li.querySelector("a");
+              link.onmouseover = function () {
+                this.style.backgroundColor = "rgba(255,255,255,0.1)";
+                this.style.color = "white";
+              };
+              link.onmouseout = function () {
+                this.style.backgroundColor = "transparent";
+                this.style.color = "#b3b3b3";
+              };
+              list.appendChild(li);
+            });
+          });
+        } catch (e) {
+          lists.forEach(
+            (l) =>
+              (l.innerHTML =
+                '<li style="color:red;">Error loading lists.</li>'),
+          );
+        }
+      }
+
+      // Load on page ready
+      document.addEventListener("DOMContentLoaded", () => {
+        setupModal();
+        loadEmotionChart();
+      });
+    </script>
+  </body>
+</html>
