@@ -18,13 +18,12 @@ Feelify is an advanced, production-ready web application designed to bridge real
 
 ## 🛠️ System Architecture & Engineering Stack
 
-                   ┌────────────────────────────────────────┐
-                   │           Client Web Browser           │
-                   └───────────────────┬────────────────────┘
-                                       │
-     ┌─────────────────────────────────┼─────────────────────────────────┐
-     ▼                                 ▼                                 ▼
-
+┌────────────────────────────────────────┐
+│ Client Web Browser │
+└───────────────────┬────────────────────┘
+│
+┌─────────────────────────────────┼─────────────────────────────────┐
+▼ ▼ ▼
 [ Biometric Interface ] [ Analytical Telemetry ] [ Secure Support Gateway ]
 Real-time canvas capture Top Tracks & Artists API Transactional SMTP relay
 & coordinate array parsing aggregations & data parsing asynchronous ticket tracking
@@ -32,7 +31,7 @@ Real-time canvas capture Top Tracks & Artists API Transactional SMTP relay
 ### Core Technologies Used
 
 - **Backend Core:** Node.js, Express.js (RESTful endpoint modeling, custom CORS controls, secure cookie-parsing engines).
-- **Database Management:** MongoDB & Mongoose ODM (Using structured upsert metrics (`findOneAndUpdate`) to prevent document duplication).
+- **Database Management:** MongoDB & Mongoose ODM (Using structured upsert metrics `findOneAndUpdate` to prevent document duplication).
 - **Network & Integration Services:** `spotify-web-api-node` core client wrappers, secure Nodemailer SMTP transmission handling.
 
 ---
@@ -43,25 +42,21 @@ Below is the production-ready mapping of application views, matching our interna
 
 ### 1. Main Hub & Dynamic Workspace Layouts
 
-|                                              Default Workspace View                                              |                                 Core Navigation Controller                                  |
-| :--------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: |
-| <img src="screenshots/dashboard.png" alt="Feelify Dashboard"/> width="410" alt="Feelify Workspace Empty State"/> | <img src="Screenshot 2026-02-08 130322.png" width="410" alt="Sidebar Navigation Profiles"/> |
+|                                 Default Workspace View                                 |                                Core Navigation Controller                                 |
+| :------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: |
+| <img src="screenshots/dashboard.png" width="410" alt="Feelify Workspace Empty State"/> | <img src="screenshots/face-detection.png" width="410" alt="Sidebar Navigation Profiles"/> |
 
-### 2. Biometric Computer Vision Pipeline
+### 2. Deep Analytics & Telemetry Reporting
 
-|                               Live Canvas Stream Tracking                                |                                  Real-Time Geometry Analysis Engine                                   |
-| :--------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------: |
-| <img src="Screenshot 2026-02-08 192838.png" width="410" alt="Webcam Capture Interface"/> | <img src="Screenshot 2026-02-08 192859.png" width="410" alt="Processing Layer Notification Overlay"/> |
+|                               Aggregate Emotion Metric Charts                                |                         Deep Consumption Analytics (Stats Engine)                         |
+| :------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: |
+| <img src="screenshots/chart.png" width="410" alt="Emotion Distribution Graphical Analysis"/> | <img src="screenshots/stats.png" width="410" alt="Monthly Vibe Check Telemetry Listing"/> |
 
-### 3. Deep Analytics, Telemetry Reporting & Support Operations
+### 3. Playlists & Support Operations
 
-|                              Deep Consumption Analytics (Stats Engine)                               |                                     Aggregate Emotion Metric Charts                                     |
-| :--------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
-| <img src="Screenshot 2026-06-01 113346.png" width="410" alt="Monthly Vibe Check Telemetry Listing"/> | <img src="Screenshot 2026-06-01 113354.png" width="410" alt="Emotion Distribution Graphical Analysis"/> |
-
-|                           Managed Ticketing Modal (Help & Support)                           |                                Structured Dynamic Playlist Outputs                                 |
-| :------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------: |
-| <img src="Screenshot 2026-02-08 130910.png" width="410" alt="Asynchronous Help Form Layer"/> | <img src="Screenshot 2026-02-08 125753.png" width="410" alt="Dual Branch Playlist Display Cards"/> |
+|                            Structured Dynamic Playlist Outputs                             |                      Managed Ticketing Modal (Help & Support)                       |
+| :----------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------: |
+| <img src="screenshots/playlist.png" width="410" alt="Dual Branch Playlist Display Cards"/> | <img src="screenshots/support.png" width="410" alt="Asynchronous Help Form Layer"/> |
 
 ---
 
