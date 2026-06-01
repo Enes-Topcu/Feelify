@@ -4,7 +4,7 @@ Feelify is an advanced, production-ready web application designed to bridge real
 
 ---
 
-##Key Features & Engineering Milestones
+## Key Features & Engineering Milestones
 
 - **Computer Vision Facial Emotion Recognition:** Processes real-time camera arrays via client-side facial land-marking models to calculate immediate affect states (e.g., Happy, Sad, Neutral) with dynamic coordinate tracking.
 - **Dual-Branch Mood Remediation Controller:** When a low-valence state (such as **Sad**) is logged, the system executes concurrent compilation logic to deliver a dual-path layout:
@@ -16,7 +16,7 @@ Feelify is an advanced, production-ready web application designed to bridge real
 
 ---
 
-## 🛠️ System Architecture & Engineering Stack
+## System Architecture & Engineering Stack
 [ Biometric Interface ]
 Real-time canvas capture        
 & coordinate array parsing
