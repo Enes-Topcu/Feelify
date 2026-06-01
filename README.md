@@ -1,64 +1,77 @@
-# Feelify v2 — Full-Stack Music Analytics & Computer Vision Mood Engine 🎵📊👁️
+# Feelify — Full-Stack Music Analytics, Computer Vision Engine & Telemetry Dashboard 🎵📊👁️
 
-Feelify v2 is an advanced, production-grade web platform that bridges consumer audio telemetry, browser-native biometrics, and automation frameworks. Leveraging the official **Spotify Web API**, **OAuth 2.0**, and client-side **Computer Vision models**, the application evaluates live facial geometry and user sentiment data to dynamically construct highly personalized listening profiles and playlist remediations.
+Feelify is an advanced, production-ready web application designed to bridge real-time user biometrics, historical streaming telemetry, and automated cloud services. By integrating the official **Spotify Web API (OAuth 2.0)**, client-side **Computer Vision classification**, and persistent storage data layers, the platform maps immediate user affect states and historical consumption habits into deeply customized audio experiences.
 
 ---
 
 ## 🚀 Key Features & Engineering Milestones
 
-- **Computer Vision Facial Emotion Recognition:** Integrated real-time, browser-native facial land-marking models to parse facial coordinate changes, instantly predicting primary user affect states (e.g., Happy, Sad, Angry, Chill) via automated webcam evaluation.
-- **Dual-Branch Mood Remediation Framework:** Architected an adaptive curation controller. When a negative valence state (like **Sad**) is identified, the engine dynamically triggers separate, simultaneous curation algorithms:
-  - _The Mirror Branch (Validation):_ Generates reflective, down-tempo compositions matching the immediate affective profile.
-  - _The Catalyst Branch (Elevation):_ Programmatically builds a "Mood Booster" track sequence using high-energy, high-valence metrics to gently elevate user mood.
-- **Bulletproof OAuth 2.0 & Token Lifecycles:** Configured an asynchronous token rotation loop using secure server-side cookies, executing silent token refreshes via backend middleware to optimize session continuity.
-- **Algorithmic Profiling & Telemetry Extraction:** Evaluates long-term, mid-term, and real-time listening datasets (`user-top-read`, `user-read-recently-played`) to render client-side analytical dashboards mapping data-driven listening trends.
-- **Distributed Customer Support Automation:** Created an decoupled email service utilizing **Nodemailer** with custom SMTP relays, generating isolated runtime tracking IDs and multi-party secure validation receipts.
+- **Computer Vision Facial Emotion Recognition:** Processes real-time camera arrays via client-side facial land-marking models to calculate immediate affect states (e.g., Happy, Sad, Neutral) with dynamic coordinate tracking.
+- **Dual-Branch Mood Remediation Controller:** When a low-valence state (such as **Sad**) is logged, the system executes concurrent compilation logic to deliver a dual-path layout:
+  - _The Mirror Stream:_ Curates validation queues reflecting the current state.
+  - _The Catalyst Stream:_ Generates a high-energy "Mood Booster" track matrix to elevate user valence metrics.
+- **Deep Listening Telemetry Analytics (Stats Engine):** Queries deep personalization vectors from Spotify API endpoints (`/v1/me/top/tracks` and `/v1/me/top/artists`). The backend processes, cleans, and structures this raw JSON payload into an indexed, comprehensive "Monthly Vibe Check" layout ranking top historical tracks and artists.
+- **Transactional Communication Gateway (Help & Support):** Engineered an encapsulated client-side feedback system driven by an Express router back-ended by automated **Nodemailer** SMTP relays. It aggregates live session states (such as active account emails) and routes inquiries securely with unique runtime identifier headers.
+- **Stateful OAuth 2.0 Hardening:** Implemented a silent security token rotation process using isolated HTTP-only cookie structures to isolate app secrets and persist user contexts with zero client-side attack surface.
 
 ---
 
-## 🛠️ System Architecture & Data Pipeline
+## 🛠️ System Architecture & Engineering Stack
 
-[ Client Webcam ] ──(Facial Geometry)──> [ Client-Side Vision Model ]
-│
-(JSON Mood Vector)
-▼
-[ Spotify Web API ] <──(OAuth 2.0 Tokens)──> [ Express Backend Router ]
-│ │
-(Track Telemetry) ▼
-│ [ MongoDB / Mongoose ]
-└──────> [ Dual-Branch Engine ] ──> (Upsert Profiles)
-├── Mirror Array
-└── Catalyst Array
+                   ┌────────────────────────────────────────┐
+                   │           Client Web Browser           │
+                   └───────────────────┬────────────────────┘
+                                       │
+     ┌─────────────────────────────────┼─────────────────────────────────┐
+     ▼                                 ▼                                 ▼
 
-### Technical Stack Summary
+[ Biometric Interface ] [ Analytical Telemetry ] [ Secure Support Gateway ]
+Real-time canvas capture Top Tracks & Artists API Transactional SMTP relay
+& coordinate array parsing aggregations & data parsing asynchronous ticket tracking
 
-- **Backend Framework:** Node.js (v18+) & Express.js (Modular route structures, secure cookie parsing, RESTful API architecture)
-- **Database Layer:** MongoDB & Mongoose Object-Data Mapper (Dynamic schemaless upserts via `findOneAndUpdate` minimizing document overhead)
-- **Biometrics Core:** Client-side Web Camera canvas processing streams mapped to specialized facial coordinate classifiers.
-- **Third-Party Ecosystem:** `spotify-web-api-node` SDK, Nodemailer SMTP relay engines.
+### Core Technologies Used
+
+- **Backend Core:** Node.js, Express.js (RESTful endpoint modeling, custom CORS controls, secure cookie-parsing engines).
+- **Database Management:** MongoDB & Mongoose ODM (Using structured upsert metrics (`findOneAndUpdate`) to prevent document duplication).
+- **Network & Integration Services:** `spotify-web-api-node` core client wrappers, secure Nodemailer SMTP transmission handling.
 
 ---
 
-## 📸 Core Visual Interfaces
+## 📸 Core UI Showcase & Visual Analytics
 
-|                         Interactive User Dashboard                         |                             Biometric Face & Emotion Detection                              |
-| :------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: |
-| <img src="screenshots/dashboard.png" width="400" alt="Feelify Dashboard"/> | <img src="screenshots/face-detection.png" width="400" alt="Facial Biometrics Tracking UI"/> |
+Below is the production-ready mapping of application views, matching our internal design system and live user workflows:
 
-|                        Multi-Engine Emotion Analytics                         |                         Dynamic Dual-Playlist Generator                         |
-| :---------------------------------------------------------------------------: | :-----------------------------------------------------------------------------: |
-| <img src="screenshots/chart.png" width="400" alt="Analytical Charts Engine"/> | <img src="screenshots/playlist.png" width="400" alt="Dynamic Curation Output"/> |
+### 1. Main Hub & Dynamic Workspace Layouts
+
+|                                              Default Workspace View                                              |                                 Core Navigation Controller                                  |
+| :--------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: |
+| <img src="screenshots/dashboard.png" alt="Feelify Dashboard"/> width="410" alt="Feelify Workspace Empty State"/> | <img src="Screenshot 2026-02-08 130322.png" width="410" alt="Sidebar Navigation Profiles"/> |
+
+### 2. Biometric Computer Vision Pipeline
+
+|                               Live Canvas Stream Tracking                                |                                  Real-Time Geometry Analysis Engine                                   |
+| :--------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------: |
+| <img src="Screenshot 2026-02-08 192838.png" width="410" alt="Webcam Capture Interface"/> | <img src="Screenshot 2026-02-08 192859.png" width="410" alt="Processing Layer Notification Overlay"/> |
+
+### 3. Deep Analytics, Telemetry Reporting & Support Operations
+
+|                              Deep Consumption Analytics (Stats Engine)                               |                                     Aggregate Emotion Metric Charts                                     |
+| :--------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
+| <img src="Screenshot 2026-06-01 113346.png" width="410" alt="Monthly Vibe Check Telemetry Listing"/> | <img src="Screenshot 2026-06-01 113354.png" width="410" alt="Emotion Distribution Graphical Analysis"/> |
+
+|                           Managed Ticketing Modal (Help & Support)                           |                                Structured Dynamic Playlist Outputs                                 |
+| :------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------: |
+| <img src="Screenshot 2026-02-08 130910.png" width="410" alt="Asynchronous Help Form Layer"/> | <img src="Screenshot 2026-02-08 125753.png" width="410" alt="Dual Branch Playlist Display Cards"/> |
 
 ---
 
-## ⚙️ Local Development Setup
+## ⚙️ Local Development & Deployment
 
-Ensure you have **Node.js** and **MongoDB** installed in your system environment.
+Ensure you have your runtime dependencies (**Node.js v18+** and a running instance of **MongoDB**) set up in your system environment before running the initialization pipeline.
 
-### 1. Dependency Initialization
+### 1. Initialization
 
 ```bash
-node server.js
 git clone [https://github.com/Enes-Topcu/Feelify.git](https://github.com/Enes-Topcu/Feelify.git)
 cd Feelify
 npm install
