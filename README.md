@@ -1,10 +1,10 @@
-# Feelify — Full-Stack Music Analytics, Computer Vision Engine & Telemetry Dashboard 🎵📊👁️
+# Feelify — Full-Stack Music Analytics, Computer Vision Engine & Telemetry Dashboard
 
 Feelify is an advanced, production-ready web application designed to bridge real-time user biometrics, historical streaming telemetry, and automated cloud services. By integrating the official **Spotify Web API (OAuth 2.0)**, client-side **Computer Vision classification**, and persistent storage data layers, the platform maps immediate user affect states and historical consumption habits into deeply customized audio experiences.
 
 ---
 
-## 🚀 Key Features & Engineering Milestones
+##Key Features & Engineering Milestones
 
 - **Computer Vision Facial Emotion Recognition:** Processes real-time camera arrays via client-side facial land-marking models to calculate immediate affect states (e.g., Happy, Sad, Neutral) with dynamic coordinate tracking.
 - **Dual-Branch Mood Remediation Controller:** When a low-valence state (such as **Sad**) is logged, the system executes concurrent compilation logic to deliver a dual-path layout:
@@ -37,7 +37,7 @@ asynchronous ticket tracking
 
 ---
 
-## 📸 Core UI Showcase & Visual Analytics
+## Core UI Showcase & Visual Analytics
 
 Below is the production-ready mapping of application views, matching our internal design system and live user workflows:
 
@@ -61,7 +61,7 @@ Below is the production-ready mapping of application views, matching our interna
 
 ---
 
-## ⚙️ Local Development & Deployment
+## Local Development & Deployment
 
 Ensure you have your runtime dependencies (**Node.js v18+** and a running instance of **MongoDB**) set up in your system environment before running the initialization pipeline.
 
