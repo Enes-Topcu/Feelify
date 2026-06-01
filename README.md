@@ -17,16 +17,17 @@ Feelify is an advanced, production-ready web application designed to bridge real
 ---
 
 ## 🛠️ System Architecture & Engineering Stack
+[ Biometric Interface ]
+Real-time canvas capture        
+& coordinate array parsing
 
-              ┌────────────────────────────────────────┐
-              │         Client Web Browser             │
-              └───────────────────┬────────────────────┘
-                                  │
-┌─────────────────────────────────┼─────────────────────────────────┐
-▼                                 ▼                                 ▼
-[ Biometric Interface ]     [ Analytical Telemetry ]       [ Secure Support Gateway ]
-Real-time canvas capture      Top Tracks & Artists API       Transactional SMTP relay
-& coordinate array parsing    aggregations & data parsing    asynchronous ticket tracking
+[ Analytical Telemetry ]
+Top Tracks & Artists API
+aggregations & data parsing
+
+[ Secure Support Gateway ]
+Transactional SMTP relay
+asynchronous ticket tracking
 
 ### Core Technologies Used
 
